@@ -122,17 +122,16 @@ const findMaxForm2 = function(strs, m, n) {
     let dp =  Array.from({length:m+1},()=>{
         return Array.from({length:n+1},()=> 0)
     })
-    const getZerosOnes = (str) => {
-        const zerosOnes = new Array(2).fill(0);
-        const length = str.length;
-        for (let i = 0; i < length; i++) {
-            zerosOnes[str[i].charCodeAt() - '0'.charCodeAt()]++;
-        }
-        return zerosOnes;
-    
-    }
     for(let i=1;i<=len;i++){
-        const [c0,c1] = getZerosOnes(strs[i-1])
+        const s = strs[i-1]
+        let c0=0,c1=0
+        for(c of s){
+            if(c==='0'){
+                c0++
+            }else{
+                c1++
+            }
+        }
         // 可增加当前数据的范围需要更新数据
         // c0<=j<=m c1<=k<=n
         // 反向更新保留上一次的值
@@ -153,9 +152,11 @@ const findMaxForm2 = function(strs, m, n) {
 // let findMaxForm = findMaxForm1
 let findMaxForm = findMaxForm2
 
+// console.time('test')
 // console.log(findMaxForm(["10","0001","111001","1","0"],5,3)) // 4
 // console.log(findMaxForm( ["10", "0", "1"], 1, 1)) // 2
 // console.log(findMaxForm( ["10","0001","111001","1","0"],4,3)) // 3
 // console.log(findMaxForm( ["111","1000","1000","1000"],9,3)) // 3
 // const l = ["0","11","1000","01","0","101","1","1","1","0","0","0","0","1","0","0110101","0","11","01","00","01111","0011","1","1000","0","11101","1","0","10","0111"]
 // console.log(findMaxForm( l,9,80))//17
+// console.timeEnd('test')
