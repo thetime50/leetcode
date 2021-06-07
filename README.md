@@ -1,2 +1,2 @@
 # leetcode
-[leetcode](https://leetcode-cn.com/u/thetime50/)
+[leetcode->](https://leetcode-cn.com/u/thetime50/)
