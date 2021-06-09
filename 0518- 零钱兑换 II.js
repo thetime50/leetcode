@@ -60,14 +60,11 @@
 var change2 = function(amount, coins) {
     const len = coins.length
 
-    let dp=Array.from({length:amount+1},(v,j)=>{
-        if(j==0) return 1
-        return j%coins[0]===0?1:0
-    })
+    let dp=Array(amount+1).fill(0);
 
-    // console.log(dp)
+    dp[0]=1
 
-    for(let i=1;i<len;i++){
+    for(let i=0;i<len;i++){
         const coin = coins[i]
         for(let j=coin;j<=amount;j++){ // 可以重复利用本次的计数结果 硬币是可以复用累加的
             dp[j]+=dp[j-coin]
