@@ -19,6 +19,7 @@
 /**
  * 
  * 1. 遍历
+ *      递归问题要想尽办法剪枝
  * 2. 动态规划
  * 
  * 
@@ -65,6 +66,7 @@ var lengthOfLIS2 = function(nums) {
         const now = nums[index]
         const last = sel[sel.length-1]
         const maybe = len-index+sel.length
+        // console.log(index,max,maybe,sel,now)
         if(now > last || (sel.length===0 && maybe>max)){ // 可使用当前项 // 优先使用
             max = Math.max(max,sel.length+1)
             // console.log(index,sel,now)
@@ -81,13 +83,50 @@ var lengthOfLIS2 = function(nums) {
     traverse(0)
     return max
 };
-// var lengthOfLIS = lengthOfLIS1
-var lengthOfLIS = lengthOfLIS2
 
-// console.log(lengthOfLIS([10,9,2,5,3,7,101,18]))//4
-// console.log(lengthOfLIS([0,1,0,3,2,3]))//4
-// console.log(lengthOfLIS([7,7,7,7,7,7,7]))//1
+/**
+ * 动态规划
+ * 
+ * i: 选入元素 // lindex 
+ * j: 目标子序列最个数 // 1<=j<=len
+ * dp[i][j] 实际子序列最个数
+ * if(i=1) dp[i][j] = 1
+ * else max( 
+ *          dp[i-1][j],
+ *          dp[i-1][j-1]+1,
+ *          )
+ * 
+ */
+var lengthOfLIS3 = function(nums) {
+    const len = nums.length
+    if(len==1){
+        return 1
+    }
+
+    let dp=Array.from({length:len+1},()=>[1,nums[0]]) // [cnt,max]
+    dp[0]=0
+    // for(let i=1;i<len;i++){
+    //     const now = nums[i]
+    //     for(let j=len;j>0;j--){
+    //         const [cnt,max] = dp[j]
+    //         if(now>max && cnt+1<=j){ // 是递增的
+    //             dp[j] = [cnt+1,now]
+    //         }
+    //     }
+    // }
+    return dp[len][0]
+};
+
+
+// var lengthOfLIS = lengthOfLIS1
+// var lengthOfLIS = lengthOfLIS2
+var lengthOfLIS = lengthOfLIS3
+
+console.log(lengthOfLIS([10,9,2,5,3,7,101,18]))//4
+console.log(lengthOfLIS([0,1,0,3,2,3]))//4
+console.log(lengthOfLIS([7,7,7,7,7,7,7]))//1
 const {l1,l2} = require( "./data/t0300.js")
 // const l1t = l1 // .slice(0,50) // Math.floor(l1.length/100))
 // console.log(lengthOfLIS(l1t))
-console.log(lengthOfLIS(l2))
+// const l2t = l2 // .slice(0,80)
+// console.log(lengthOfLIS(l2t))
