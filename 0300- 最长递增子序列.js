@@ -120,12 +120,12 @@ var lengthOfLIS3 = function(nums) {
 
 // var lengthOfLIS = lengthOfLIS1
 // var lengthOfLIS = lengthOfLIS2
-var lengthOfLIS = lengthOfLIS3
+// var lengthOfLIS = lengthOfLIS3
 
-console.log(lengthOfLIS([10,9,2,5,3,7,101,18]))//4
-console.log(lengthOfLIS([0,1,0,3,2,3]))//4
-console.log(lengthOfLIS([7,7,7,7,7,7,7]))//1
-const {l1,l2} = require( "./data/t0300.js")
+// console.log(lengthOfLIS([10,9,2,5,3,7,101,18]))//4
+// console.log(lengthOfLIS([0,1,0,3,2,3]))//4
+// console.log(lengthOfLIS([7,7,7,7,7,7,7]))//1
+// const {l1,l2} = require( "./data/t0300.js")
 // const l1t = l1 // .slice(0,50) // Math.floor(l1.length/100))
 // console.log(lengthOfLIS(l1t))
 // const l2t = l2 // .slice(0,80)
