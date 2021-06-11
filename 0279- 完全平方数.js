@@ -23,6 +23,7 @@
 /**
  * 1. 找数
  * 2. 动态规划
+ * t: O(n*n^.5) m: O(n)
  * 
  * i: 选入的完全平方数个数 // index
  * j: target number 

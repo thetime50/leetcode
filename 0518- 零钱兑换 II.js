@@ -11,7 +11,7 @@
 
 /**
  * 动态规划 完全背包问题
- * t: O(n*n^.5) m: O(n)
+ * t: O(amount×n) m: O(amount)
  * 
  * i: 面值种类 // index
  * j: 目标金额
@@ -57,7 +57,7 @@
     return dp[amount]
 };
 
-
+// t: O(amount×n) m: O(amount)
 var change2 = function(amount, coins) {
     const len = coins.length
 
