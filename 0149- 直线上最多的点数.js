@@ -43,7 +43,7 @@ var maxPoints = function(points) {
                     cnt++
                 }else{
                 	if(len-k-1+cnt<=max){
-                        console.log('*',i,j,k)
+                        // console.log('*',i,j,k)
                 	    break
                 	}
                 }
