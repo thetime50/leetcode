@@ -32,11 +32,88 @@
  */
 var openLock = function(deadends, target) {
     const tlen = target.length
-    for(let i=0; i<tlen; i++){
-        for(let j=0; j<4; j++){
-            // 
-        }
+    let maps= Array.from({length:10},()=>
+        Array.from({length:10},()=>
+            Array.from({length:10},()=>
+                Array(10).fill(Number.MAX_VALUE)
+            )
+        )
+    )
+    function setMaps(index,val){
+        maps[index[0]][index[1]]
+        	[index[2]][index[3]] = val
     }
+
+    function getMaps(index,val){
+        return maps[index[0]][index[1]]
+        	[index[2]][index[3]]
+    }
+    function loopAdd(val,add){
+        if(val==9&&add>0){
+            return 0
+        }
+        if(val==0&&add<0){
+            return 9
+        }
+        return val+add
+    }
+
+    deadends.forEach((v,i,a)=>{
+        setMaps(v,-1)
+    })
+    // 深度优先
+    // 因为是深度优先 所以在第一个循环中会尽量把格子填满
+    // 所以递归深度=10000 所以容易爆栈
+    let now = [0,0,0,0]
+	function toNext(step){
+        console.log(now.join(''),step)
+        setMaps(now,step)
+        now[0]=loopAdd(now[0],1)
+        if(getMaps(now)>step+1){// 之前的走法步数更多 刷新路径
+			toNext(step+1)
+        }
+        now[0]=loopAdd(now[0],-1)
+        now[1]=loopAdd(now[1],1)
+        if(getMaps(now)>step+1){// 之前的走法步数更多 刷新路径
+			toNext(step+1)
+        }
+        now[1]=loopAdd(now[1],-1)
+        now[2]=loopAdd(now[2],1)
+        if(getMaps(now)>step+1){// 之前的走法步数更多 刷新路径
+			toNext(step+1)
+        }
+        now[2]=loopAdd(now[2],-1)
+        now[3]=loopAdd(now[3],1)
+        if(getMaps(now)>step+1){// 之前的走法步数更多 刷新路径
+			toNext(step+1)
+        }
+        now[3]=loopAdd(now[3],-1)
+        ////
+
+        now[0]=loopAdd(now[0],-1)
+        if(getMaps(now)>step+1){// 之前的走法步数更多 刷新路径
+			toNext(step+1)
+        }
+        now[0]=loopAdd(now[0],1)
+        now[1]=loopAdd(now[1],-1)
+        if(getMaps(now)>step+1){// 之前的走法步数更多 刷新路径
+			toNext(step+1)
+        }
+        now[1]=loopAdd(now[1],1)
+        now[2]=loopAdd(now[2],-1)
+        if(getMaps(now)>step+1){// 之前的走法步数更多 刷新路径
+			toNext(step+1)
+        }
+        now[2]=loopAdd(now[2],1)
+        now[3]=loopAdd(now[3],-1)
+        if(getMaps(now)>step+1){// 之前的走法步数更多 刷新路径
+			toNext(step+1)
+        }
+        now[3]=loopAdd(now[3],1)
+    }
+    toNext(0)
+    let ret = getMaps(target)
+    return ret//>=10000?-1:ret
 };
 
 let deadends1 = ["0201","0101","0102","1212","2002"], target1 = "0202" // 6
