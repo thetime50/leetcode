@@ -30,7 +30,7 @@
  * @param {string} target
  * @return {number}
  */
-var openLock = function(deadends, target) {
+var openLock1 = function(deadends, target) {
     const tlen = target.length
     let maps= Array.from({length:10},()=>
         Array.from({length:10},()=>
@@ -66,7 +66,7 @@ var openLock = function(deadends, target) {
     // 所以递归深度=10000 所以容易爆栈
     let now = [0,0,0,0]
 	function toNext(step){
-        console.log(now.join(''),step)
+        // console.log(now.join(''),step)
         setMaps(now,step)
         now[0]=loopAdd(now[0],1)
         if(getMaps(now)>step+1){// 之前的走法步数更多 刷新路径
@@ -115,6 +115,113 @@ var openLock = function(deadends, target) {
     let ret = getMaps(target)
     return ret//>=10000?-1:ret
 };
+
+var openLock2 = function(deadends, target) {
+    const tlen = target.length
+    let maps= Array.from({length:10},()=>
+        Array.from({length:10},()=>
+            Array.from({length:10},()=>
+                Array(10).fill(Number.MAX_VALUE)
+            )
+        )
+    )
+    function setMaps(index,val){
+        maps[index[0]][index[1]]
+        	[index[2]][index[3]] = val
+    }
+
+    function getMaps(index,val){
+        return maps[index[0]][index[1]]
+        	[index[2]][index[3]]
+    }
+    function loopAdd(val,add){
+        if(val==9&&add>0){
+            return 0
+        }
+        if(val==0&&add<0){
+            return 9
+        }
+        return val+add
+    }
+    function unitAdd(index,offset,add){
+        let now = index.concat()
+        now[offset]=loopAdd(now[offset],add)
+        return now
+    }
+
+    setMaps([0,0,0,0],0)
+    deadends.forEach((v,i,a)=>{
+        setMaps(v,-1)
+    })
+    // 广度优先
+    let oldEdge = [[0,0,0,0]]
+    let newEdge = []
+    let max = Number.MAX_VALUE
+
+    function toNext(index,step){
+        setMaps(index,step)
+        newEdge.push(index.concat())
+        if(index.join('') == target){
+            max = Math.min(max,step)
+        }
+    }
+    while(oldEdge.length){
+        oldEdge.forEach((v,i,a)=>{
+            let step = getMaps(v)
+            if(step<0||step+1>=max){
+                return
+            }
+            step++
+            let now
+
+            now = unitAdd(v,0,1)
+            if(getMaps(now)>step){// 之前的走法步数更多 刷新路径
+                toNext(now,step)
+            }
+            now = unitAdd(v,1,1)
+            if(getMaps(now)>step){// 之前的走法步数更多 刷新路径
+                toNext(now,step)
+            }
+            now = unitAdd(v,2,1)
+            if(getMaps(now)>step){// 之前的走法步数更多 刷新路径
+                toNext(now,step)
+            }
+            now = unitAdd(v,3,1)
+            if(getMaps(now)>step){// 之前的走法步数更多 刷新路径
+                toNext(now,step)
+            }
+            ////
+
+            now = unitAdd(v,0,-1)
+            if(getMaps(now)>step){// 之前的走法步数更多 刷新路径
+                toNext(now,step)
+            }
+            now = unitAdd(v,1,-1)
+            if(getMaps(now)>step){// 之前的走法步数更多 刷新路径
+                toNext(now,step)
+            }
+            now = unitAdd(v,2,-1)
+            if(getMaps(now)>step){// 之前的走法步数更多 刷新路径
+                toNext(now,step)
+            }
+            now = unitAdd(v,3,-1)
+            if(getMaps(now)>step){// 之前的走法步数更多 刷新路径
+                toNext(now,step)
+            }
+        })
+
+        oldEdge = newEdge
+        newEdge = []
+
+        // console.log('*', oldEdge.join(','))
+    }
+    let ret = max // getMaps(target)
+    return ret>=10000?-1:ret
+};
+
+
+// let openLock = openLock1
+let openLock = openLock2
 
 let deadends1 = ["0201","0101","0102","1212","2002"], target1 = "0202" // 6
 let deadends2 = ["8888"], target2 = "0009" // 1
