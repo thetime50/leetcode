@@ -44,7 +44,7 @@ var openLock1 = function(deadends, target) {
         	[index[2]][index[3]] = val
     }
 
-    function getMaps(index,val){
+    function getMaps(index){
         return maps[index[0]][index[1]]
         	[index[2]][index[3]]
     }
@@ -117,7 +117,9 @@ var openLock1 = function(deadends, target) {
 };
 
 var openLock2 = function(deadends, target) {
-    const tlen = target.length
+    if(target === '0000'){
+        return 0
+    }
     let maps= Array.from({length:10},()=>
         Array.from({length:10},()=>
             Array.from({length:10},()=>
@@ -130,7 +132,7 @@ var openLock2 = function(deadends, target) {
         	[index[2]][index[3]] = val
     }
 
-    function getMaps(index,val){
+    function getMaps(index){
         return maps[index[0]][index[1]]
         	[index[2]][index[3]]
     }
@@ -219,18 +221,127 @@ var openLock2 = function(deadends, target) {
     return ret>=10000?-1:ret
 };
 
+// 这个内存和时间都更差
+var openLock3 = function(deadends, target) {
+    if(target === '0000'){
+        return 0
+    }
+    let maps= new Map()
+    function setMaps(index,val){
+        if(typeof index !== 'string'){
+            index = index.join('')
+        }
+        maps.set(index,val)
+    }
+
+    function getMaps(index){
+        if(typeof index !== 'string'){
+            index = index.join('')
+        }
+        if(maps.has(index)){
+            return maps.get(index)
+        }
+        return Number.MAX_VALUE
+    }
+    function loopAdd(val,add){
+        if(val==9&&add>0){
+            return 0
+        }
+        if(val==0&&add<0){
+            return 9
+        }
+        return val+add
+    }
+    function unitAdd(index,offset,add){
+        let now = index.concat()
+        now[offset]=loopAdd(now[offset],add)
+        return now
+    }
+
+    setMaps([0,0,0,0],0)
+    deadends.forEach((v,i,a)=>{
+        setMaps(v,-1)
+    })
+    // 广度优先
+    let oldEdge = [[0,0,0,0]]
+    let newEdge = []
+    let max = Number.MAX_VALUE
+
+    function toNext(index,step){
+        setMaps(index,step)
+        newEdge.push(index.concat())
+        if(index.join('') == target){
+            max = Math.min(max,step)
+        }
+    }
+    while(oldEdge.length){
+        oldEdge.forEach((v,i,a)=>{
+            let step = getMaps(v)
+            if(step<0||step+1>=max){
+                return
+            }
+            step++
+            let now
+
+            now = unitAdd(v,0,1)
+            if(getMaps(now)>step){// 之前的走法步数更多 刷新路径
+                toNext(now,step)
+            }
+            now = unitAdd(v,1,1)
+            if(getMaps(now)>step){// 之前的走法步数更多 刷新路径
+                toNext(now,step)
+            }
+            now = unitAdd(v,2,1)
+            if(getMaps(now)>step){// 之前的走法步数更多 刷新路径
+                toNext(now,step)
+            }
+            now = unitAdd(v,3,1)
+            if(getMaps(now)>step){// 之前的走法步数更多 刷新路径
+                toNext(now,step)
+            }
+            ////
+
+            now = unitAdd(v,0,-1)
+            if(getMaps(now)>step){// 之前的走法步数更多 刷新路径
+                toNext(now,step)
+            }
+            now = unitAdd(v,1,-1)
+            if(getMaps(now)>step){// 之前的走法步数更多 刷新路径
+                toNext(now,step)
+            }
+            now = unitAdd(v,2,-1)
+            if(getMaps(now)>step){// 之前的走法步数更多 刷新路径
+                toNext(now,step)
+            }
+            now = unitAdd(v,3,-1)
+            if(getMaps(now)>step){// 之前的走法步数更多 刷新路径
+                toNext(now,step)
+            }
+        })
+
+        oldEdge = newEdge
+        newEdge = []
+
+        // console.log('*', oldEdge.join(','))
+    }
+    let ret = max // getMaps(target)
+    return ret>=10000?-1:ret
+};
 
 // let openLock = openLock1
-let openLock = openLock2
+// let openLock = openLock2
+let openLock = openLock3
 
-let deadends1 = ["0201","0101","0102","1212","2002"], target1 = "0202" // 6
-let deadends2 = ["8888"], target2 = "0009" // 1
-let deadends3 = ["8887","8889","8878","8898","8788","8988","7888","9888"], target3 = "8888" // -1
-let deadends4 = ["0000"], target4 = "8888" // -1
+// let deadends1 = ["0201","0101","0102","1212","2002"], target1 = "0202" // 6
+// let deadends2 = ["8888"], target2 = "0009" // 1
+// let deadends3 = ["8887","8889","8878","8898","8788","8988","7888","9888"], target3 = "8888" // -1
+// let deadends4 = ["0000"], target4 = "8888" // -1
+let deadends5 = ["0201","0101","0102","1212","2002"], target5 = "0000" // 0
 
 
-console.log(openLock(deadends1,target1))
-console.log(openLock(deadends2,target2))
-console.log(openLock(deadends3,target3))
-console.log(openLock(deadends4,target4))
+// console.log(openLock(deadends1,target1))
+// console.log(openLock(deadends2,target2))
+// console.log(openLock(deadends3,target3))
+// console.log(openLock(deadends4,target4))
+console.log(openLock(deadends5,target5))
 
